@@ -92,6 +92,19 @@ function convertNode(node: ProseMirrorNode): PortableTextBlock | PortableTextBlo
 }
 
 /**
+ * Read a TipTap `textAlign` attr and return it only when it is a non-default
+ * alignment. Omitted otherwise so existing content without explicit alignment
+ * (and the editor's default "left") stays byte-identical on save.
+ */
+function readTextAlign(node: ProseMirrorNode): PortableTextTextBlock["textAlign"] | undefined {
+	const value = node.attrs?.textAlign;
+	if (value === "center" || value === "right" || value === "justify") {
+		return value;
+	}
+	return undefined;
+}
+
+/**
  * Convert paragraph to Portable Text block
  */
 function convertParagraph(node: ProseMirrorNode): PortableTextTextBlock | null {
@@ -102,12 +115,15 @@ function convertParagraph(node: ProseMirrorNode): PortableTextTextBlock | null {
 		return null;
 	}
 
+	const textAlign = readTextAlign(node);
+
 	return {
 		_type: "block",
 		_key: generateKey(),
 		style: "normal",
 		children,
 		markDefs: markDefs.length > 0 ? markDefs : undefined,
+		...(textAlign ? { textAlign } : {}),
 	};
 }
 
@@ -143,12 +159,15 @@ function convertHeading(node: ProseMirrorNode): PortableTextTextBlock | null {
 		return null;
 	}
 
+	const textAlign = readTextAlign(node);
+
 	return {
 		_type: "block",
 		_key: generateKey(),
 		style,
 		children,
 		markDefs: markDefs.length > 0 ? markDefs : undefined,
+		...(textAlign ? { textAlign } : {}),
 	};
 }
 

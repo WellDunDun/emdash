@@ -41,6 +41,12 @@ export interface PortableTextTextBlock {
 	style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
 	listItem?: "bullet" | "number";
 	level?: number;
+	/**
+	 * Optional text alignment, mirroring the TipTap
+	 * `@tiptap/extension-text-align` attr. Omitted when alignment matches the
+	 * editor default ("left") so existing content stays byte-identical.
+	 */
+	textAlign?: "left" | "center" | "right" | "justify";
 	children: PortableTextSpan[];
 	markDefs?: PortableTextMarkDef[];
 }
