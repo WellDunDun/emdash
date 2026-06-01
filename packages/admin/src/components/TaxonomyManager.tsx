@@ -352,8 +352,8 @@ function TermFormDialog({
 				}
 			}}
 		>
-			<Dialog className="p-6" size="lg">
-				<form onSubmit={handleSubmit}>
+			<Dialog className="p-6 max-h-[90vh] flex flex-col overflow-hidden" size="lg">
+				<form onSubmit={handleSubmit} className="flex flex-col min-h-0 flex-1">
 					<div className="flex items-start justify-between gap-4 mb-4">
 						<div className="flex flex-col space-y-1.5">
 							<Dialog.Title className="text-lg font-semibold leading-none tracking-tight">
@@ -384,7 +384,7 @@ function TermFormDialog({
 						/>
 					</div>
 
-					<div className="space-y-4 py-4">
+					<div className="flex-1 overflow-y-auto min-h-0 space-y-4 py-4">
 						<Input
 							label={t`Name`}
 							value={label}
