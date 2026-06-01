@@ -1021,6 +1021,7 @@ export function ContentEditor({
 											navigate({
 												to: "/content/$collection/$id",
 												params: { collection, id: tr.id },
+												search: { locale: tr.locale },
 											})
 										}
 										onCreate={onTranslate}
