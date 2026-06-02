@@ -1,5 +1,28 @@
 # emdash
 
+## 0.17.0
+
+### Minor Changes
+
+- [#1215](https://github.com/emdash-cms/emdash/pull/1215) [`590b2f9`](https://github.com/emdash-cms/emdash/commit/590b2f97367d6881d8c59e5f0a88e7ad69138acb) Thanks [@scottbuscemi](https://github.com/scottbuscemi)! - First-class HTML block in the admin editor. The existing `htmlBlock` Portable Text type (produced by the WordPress and Contentful importers) is now a fully editable block in the rich-text editor. Authors can insert an HTML block via the `/html` slash command and edit raw HTML in a textarea. Imported `htmlBlock` content that previously fell through to an opaque `pluginBlock` placeholder is now rendered in the same editable UI. The inline (visual-editing) editor preserves HTML blocks as read-only placeholders to prevent data loss.
+
+### Patch Changes
+
+- [#1197](https://github.com/emdash-cms/emdash/pull/1197) [`62c170f`](https://github.com/emdash-cms/emdash/commit/62c170f11403d76370d6c89f8fa25b0bbcf003fd) Thanks [@scottbuscemi](https://github.com/scottbuscemi)! - Persist welcome-dismissed flag in database instead of session. Previously the welcome modal would be shown every time a user logged-in.
+
+- [#1226](https://github.com/emdash-cms/emdash/pull/1226) [`9422d6a`](https://github.com/emdash-cms/emdash/commit/9422d6a744b17f477a3966c3c7e07a087a3345e6) Thanks [@scottbuscemi](https://github.com/scottbuscemi)! - Make content list search work on large collections ([#1219](https://github.com/emdash-cms/emdash/issues/1219)). The admin content list previously filtered only the rows already loaded on the current page, so an entry far back in a big collection could not be found until you navigated near it. The list endpoint now accepts a `q` parameter and performs a case-insensitive substring search across the collection's title/name/slug columns server-side (LIKE wildcards in the query are escaped), and the admin search box drives that query (debounced) instead of filtering in memory. Also adds locale-aware composite indexes (`idx_{table}_loc_upd` / `idx_{table}_loc_crt`) so locale-filtered content lists stay index-served on large, i18n-enabled tables.
+
+- [#1224](https://github.com/emdash-cms/emdash/pull/1224) [`67f5992`](https://github.com/emdash-cms/emdash/commit/67f5992aec23d02c724505632ce951e5b7af9cdb) Thanks [@scottbuscemi](https://github.com/scottbuscemi)! - Fix taxonomy terms not being locale-aware in the content editor ([#1218](https://github.com/emdash-cms/emdash/issues/1218)). Term assignments are stored against the per-locale content row while the term's `translation_group` spans every locale, so resolving terms for an entry must scope to the entry's locale. The content terms endpoint (`/content/:collection/:id/terms/:taxonomy`) now derives the entry's locale server-side and passes it to `getTermsForEntry`, and the admin `TaxonomySidebar` threads the entry locale through its fetch/save calls (and into its React Query keys, so switching translations refetches). Previously a localized post showed and applied every locale variant of a tag instead of just the variant for its own locale.
+
+- [#1227](https://github.com/emdash-cms/emdash/pull/1227) [`a40e455`](https://github.com/emdash-cms/emdash/commit/a40e455a8de730a61291798a3fe0ee32dde24ed0) Thanks [@scottbuscemi](https://github.com/scottbuscemi)! - Add search and filtering to the media library ([#1221](https://github.com/emdash-cms/emdash/issues/1221)). The media list endpoint now accepts a `q` parameter for a case-insensitive filename substring search (which also matches extensions, with LIKE wildcards escaped), alongside the existing `mimeType` filter. The Media Library page gains a filename search box and a type filter (images / video / audio / documents), and the media picker in the content editor now searches the local library by filename too. Previously neither surface could search or filter local media, which made large libraries hard to navigate.
+
+- [#1285](https://github.com/emdash-cms/emdash/pull/1285) [`5e7f835`](https://github.com/emdash-cms/emdash/commit/5e7f83571dbc4832e91881aafbb470407c19b482) Thanks [@ascorbic](https://github.com/ascorbic)! - Fix SEO fields (noindex toggle, canonical URL) not affecting rendered pages. The content loader now surfaces per-entry SEO metadata on `entry.data.seo`, so `getSeoMeta()` reflects values set in the admin SEO panel. SEO is folded into the existing entry query via a LEFT JOIN, adding no extra database round-trips.
+
+- Updated dependencies [[`886f2d1`](https://github.com/emdash-cms/emdash/commit/886f2d1e4969403787cc39dfbda6dcdfe034372c), [`a5dafb3`](https://github.com/emdash-cms/emdash/commit/a5dafb32b75358c96be5f2a2487bf323a0045bb8), [`9422d6a`](https://github.com/emdash-cms/emdash/commit/9422d6a744b17f477a3966c3c7e07a087a3345e6), [`67f5992`](https://github.com/emdash-cms/emdash/commit/67f5992aec23d02c724505632ce951e5b7af9cdb), [`a40e455`](https://github.com/emdash-cms/emdash/commit/a40e455a8de730a61291798a3fe0ee32dde24ed0), [`34afc14`](https://github.com/emdash-cms/emdash/commit/34afc1448440f8ffab956f096322d67ec42127cb), [`590b2f9`](https://github.com/emdash-cms/emdash/commit/590b2f97367d6881d8c59e5f0a88e7ad69138acb), [`7d55db6`](https://github.com/emdash-cms/emdash/commit/7d55db6ca3291eac1c2cfda865e1b0e507fdece5)]:
+  - @emdash-cms/admin@0.17.0
+  - @emdash-cms/auth@0.17.0
+  - @emdash-cms/gutenberg-to-portable-text@0.17.0
+
 ## 0.16.1
 
 ### Patch Changes
